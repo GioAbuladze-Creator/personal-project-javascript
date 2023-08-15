@@ -144,9 +144,7 @@ export default class Persons {
         if (arguments.length != 1) {
             throw new Error("Invalid number of arguments");
         }
-        if (typeof id != "string") {
-            throw new Error("Invalid type of arguments");
-        }
+        this.#validateId(id);
         if (!this.#persons.has(id)) {
             throw new Error("Person with this id does not exist");
         }
