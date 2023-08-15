@@ -131,7 +131,7 @@ let updatedPupil= {
 
 // will update Pupil. This method should use the same validation as a add method
 pupils.update(pupil.id, updatedPupil)
+// will remove pupil
 // pupils.remove(pupil.id)
 
-// will remove pupil
 pupils.print()

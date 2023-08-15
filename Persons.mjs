@@ -85,6 +85,11 @@ export default class Persons {
         }
         
     }
+    // to use it outside of class
+    static personValidator(person) {
+        const instance = new Persons();
+        instance.#personValidation(person);
+    }
     
     constructor() {
         this.#persons = new Map();
