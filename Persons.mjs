@@ -1,24 +1,44 @@
 export default class Persons {
     #persons;
-    #personValidation(person) {
+    #required=['name','dateOfBirth','phones','sex'];
+    #validateId(id) {
+        if (typeof id !== "string"){
+            throw new Error("read method accepts id as a string");
+        }
+    }
+    #validateObject(object, name) {
+        if (typeof object !== "object" || object == null || Array.isArray(object)) {
+            throw new Error(`${name} must be an object`);
+        }
+    }
+    #personValidation(person,allRequired=true) {
         // will be same for teacher and pupil
-        if (typeof person !== 'object' || Array.isArray(person) || person === null || Object.keys(person) == 0) {
-            throw new Error("Invalid Object")
+        this.#validateObject(person, "Person");        
+        
+        if(allRequired){
+            for(let key of this.#required){
+                if(!person.hasOwnProperty(key)){
+                    throw new Error(`Invalid ${key}`)
+                }
+            }
         }
         // name validation
-        if(!person.hasOwnProperty('name') || typeof person.name !== 'object' || Array.isArray(person.name) || person.name === null || Object.keys(person.name) == 0) {
-            throw new Error("Invalid name")
-        }
-        if(!person.name.hasOwnProperty('first') || typeof person.name.first !== 'string' || person.name.first.length == 0) {
-            throw new Error("Invalid first name")
-        }
-        if(!person.name.hasOwnProperty('last') || typeof person.name.last !== 'string' || person.name.last.length == 0) {
-            throw new Error("Invalid last name")
+        this.#validateObject(person.name, "Name");
+
+        if(person.name){
+
+            if(!person.name.hasOwnProperty('first') || typeof person.name.first !== 'string' || person.name.first.length == 0) {
+                throw new Error("Invalid first name")
+            }
+            if(!person.name.hasOwnProperty('last') || typeof person.name.last !== 'string' || person.name.last.length == 0) {
+                throw new Error("Invalid last name")
+            }
         }
         // date of birth validation
-        if(!person.hasOwnProperty('dateOfBirth') || typeof person.dateOfBirth !== 'string' || person.dateOfBirth.length == 0) {
+        if(person.dateOfBirth && (typeof person.dateOfBirth !== 'string' || person.dateOfBirth.length == 0)) {
             throw new Error("Invalid date of birth")
-        }else{
+        }
+        if(person.dateOfBirth){
             // dd-mm-yyyy
             let [day,month,year]=person.dateOfBirth.split('-');
             if(isNaN(day) || isNaN(month) || isNaN(year)){
@@ -32,12 +52,14 @@ export default class Persons {
             }
         }
         // phones validation
-        if(!person.hasOwnProperty('phones')||!Array.isArray(person.phones)){
+        if(person.phones && !Array.isArray(person.phones)){
             throw new Error("Invalid phones")
-        }else{
+        }
+        if(person.phones){
             let regex=/^\+995\s\([0-9]{3}\)\s[0-9]{2}-[0-9]{2}-[0-9]{2}$/;
             for(let phone of person.phones){
-                if(typeof phone!='object' || Array.isArray(phone) || phone === null || Object.keys(phone) == 0){
+                this.#validateObject(phone, "Phone");
+                if(Object.keys(phone).length != 2){
                     throw new Error("Invalid phones")
                 }
                 if(!phone.hasOwnProperty('phone')||typeof phone.phone!='string' || !phone.hasOwnProperty('primary')||typeof phone.primary!='boolean'){
@@ -47,31 +69,23 @@ export default class Persons {
                     throw new Error("Invalid phone number")
                 }
             }
-                
-            if(typeof person.phones[0].phone!='string' || !regex.test(person.phones[0].phone)){
-                throw new Error("Invalid phone number")
-            }          
-            for(let i of person.phones){
-                if(typeof i != 'object' || Array.isArray(i) || i === null || Object.keys(i) == 0){
-                    throw new Error("Invalid phones")
-                }
-                if(!i.hasOwnProperty('phone')||typeof i.phone!='string' || !i.hasOwnProperty('primary')||typeof i.primary!='boolean'){
-                    throw new Error("Invalid phones")
-                }
-            }
         }
         //sex validation
-        if(!person.hasOwnProperty('sex')||typeof person.sex!='string'){
+        if(person.sex && typeof person.sex!='string'){
             throw new Error('Invalid sex')
         }
-        if(person.sex.toLowerCase()!='male' && person.sex.toLowerCase()!='female'){
-            throw new Error('Invalid sex')
+        if(person.sex){
+            if(person.sex.toLowerCase()!='male' && person.sex.toLowerCase()!='female'){
+                throw new Error('Invalid sex')
+            }
         }
         //description validation
         if(person.hasOwnProperty('description') && typeof person.description!='string'){
             throw new Error('Invalid description')
         }
+        
     }
+    
     constructor() {
         this.#persons = new Map();
     }
@@ -100,9 +114,7 @@ export default class Persons {
         if (arguments.length != 1) {
             throw new Error("Invalid number of arguments");
         }
-        if (typeof id != "string") {
-            throw new Error("Invalid type of arguments");
-        }
+        this.#validateId(id);
         if (!this.#persons.has(id)) {
             throw new Error("Person with this id does not exist");
         }
@@ -119,7 +131,8 @@ export default class Persons {
         }
 
         // validations
-        this.#personValidation(person);
+        this.#validateId(id);
+        this.#personValidation(person,false);
         // custom person validation same as add method
 
         if (!this.#persons.has(id)) {

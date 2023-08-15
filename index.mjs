@@ -2,45 +2,45 @@ import Subjects from './Subjects.mjs';
 import Pupils from './Pupils.mjs';
 import Teachers from './Teachers.mjs';
 
-const history = {
-    title: 'History',
-    lessons: 24
-};
-const math = {
-    title: 'Math',
-    lessons: 30,
-    desc:'math is fun'
-};
-const physics = {
-    title: 'Physics',
-    lessons: 15,
-    desc:'physics is dangerous',
-};
+// const history = {
+//     title: 'History',
+//     lessons: 24
+// };
+// const math = {
+//     title: 'Math',
+//     lessons: 30,
+//     desc:'math is fun'
+// };
+// const physics = {
+//     title: 'Physics',
+//     lessons: 15,
+//     desc:'physics is dangerous',
+// };
 
-const subjects = new Subjects();
+// const subjects = new Subjects();
 
-const id = subjects.add(history); 
-const id2 = subjects.add(math); 
-const id3 = subjects.add(physics); 
-subjects.readAll();
-console.log(subjects.verify(history));
-subjects.remove(id2);
-subjects.readAll();
+// const id = subjects.add(history); 
+// const id2 = subjects.add(math); 
+// const id3 = subjects.add(physics); 
+// subjects.readAll();
+// console.log(subjects.verify(history));
+// subjects.remove(id2);
+// subjects.readAll();
 
 
 // -------Teachers-------
 let teachers = new Teachers();
 teachers.print()
-let teacher1={
+let teacher1 = {
     name: {
         first: "Gio",
-        last: "Carvanjo"
+        last: "Carvanjo",
     },
-    dateOfBirth: "14-8-2023", 
+    dateOfBirth: "14-8-2023",
     emails: [
         {
             email: "maths@gmail.com",
-            primary: false
+            primary: false,
         }
     ],
     phones: [
@@ -49,10 +49,10 @@ let teacher1={
             primary: true,
         }
     ],
-    sex: "MALE", 
+    sex: "MALE",
     subjects: [
         {
-            subject: "Maths" 
+            subject: "Maths",
         }
     ],
     description: "Have Fun!",
@@ -66,26 +66,18 @@ let updatedProfile = {
         first: "Sacha",
         last: "Baron"
     },
-    dateOfBirth: "22-01-1973", 
     emails: [
         {
             email: "yeah@gmail.com", // any@any.any
             primary: true
         }
     ],
-    phones: [
-        {
-            phone: "+995 (557) 07-88-87", // +995 (XXX) XX-XX-XX
-            primary: true,
-        }
-    ],
-    sex: "MALE", 
     subjects: [
         {
-            subject: "Music" 
+            subject: "Music"
         }
     ],
-    description: "MUsic is Fun!",
+    description: "Music is Fun!",
 }
 
 teachers.update(teacherId, updatedProfile)
@@ -106,7 +98,7 @@ const data = {
     phones: [
         {
             phone: "+995 (551) 12-13-73", // +995 (XXX) XX-XX-XX
-            primary: false
+            primary: false,
         }
     ],
     sex: "male", // male OR female

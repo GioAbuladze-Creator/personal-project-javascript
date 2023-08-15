@@ -95,6 +95,6 @@ export default class Subjects {
 // const id2 = subjects.add(math); 
 // const id3 = subjects.add(physics); 
 // subjects.readAll();
-// console.log(subjects.verify(id3));
+// console.log(subjects.verify(math));
 // subjects.remove(id2);
 // subjects.readAll();
