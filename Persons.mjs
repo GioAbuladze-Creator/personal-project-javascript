@@ -121,7 +121,7 @@ export default class Persons {
         }
         this.#validateId(id);
         if (!this.#persons.has(id)) {
-            throw new Error("Person with this id does not exist");
+            throw new Error("id does not exist");
         }
         // add id in object and return it
         this.#persons.get(id).id=id;
@@ -155,10 +155,4 @@ export default class Persons {
         }
         this.#persons.delete(id);
     }
-
-    // remove print () we dont need it
-    print(){
-        console.log(this.#persons)
-    }
-
 }

@@ -68,7 +68,6 @@ export default class Subjects {
         for(let i of this.#subjectList){
             i[1].id=i[0];
         }
-        console.log([...this.#subjectList.values()])
         return [...this.#subjectList.values()];
     }
 

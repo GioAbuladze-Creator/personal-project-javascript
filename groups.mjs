@@ -89,7 +89,6 @@ export default class Groups {
         }
         // return a copy of the group 
         this.#groups.get(groupId).pupils = [...this.#groups.get(groupId).pupils];
-        console.log(this.#groups.get(groupId))
         return this.#groups.get(groupId);
     }
     readAll(){
@@ -97,54 +96,53 @@ export default class Groups {
         for(let group of this.#groups.values()){
             group.pupils = [...group.pupils];
         }
-        console.log([...this.#groups.values()])
         return [...this.#groups.values()];
     }
 
 }
 
 
-let groups = new Groups();
-let groupId = groups.add(100);
-let groupId2 = groups.add(777);
+// let groups = new Groups();
+// let groupId = groups.add(100);
+// let groupId2 = groups.add(777);
 
-const pupils = new Pupils();
-const data = {
-    name: {
-        first: "Michael",
-        last: "Jordan"
-    },
-    dateOfBirth: "05-02-1970", // dd-mm-yyyy
-    phones: [
-        {
-            phone: "+995 (551) 12-13-73", // +995 (XXX) XX-XX-XX
-            primary: false,
-        }
-    ],
-    sex: "male", // male OR female
-    description: "Basketball player"
-}
-const data2 = {
-    name: {
-        first: "Cristiano",
-        last: "Ronaldo"
-    },
-    dateOfBirth: "11-04-1988", // dd-mm-yyyy
-    phones: [
-        {
-            phone: "+995 (566) 23-13-77", // +995 (XXX) XX-XX-XX
-            primary: true,
-        }
-    ],
-    sex: "male", // male OR female
-    description: "Football player"
-}
-// Create a new pupil
-const pupil = pupils.add(data);
-const pupil2 = pupils.add(data2);
-groups.addPupil(groupId, pupil);
-groups.addPupil(groupId, pupil2);
-// groups.removePupil(groupId, pupil.id)
-groups.update(groupId, {room:299})
-groups.read(groupId)
-groups.readAll()
+// const pupils = new Pupils();
+// const data = {
+//     name: {
+//         first: "Michael",
+//         last: "Jordan"
+//     },
+//     dateOfBirth: "05-02-1970", // dd-mm-yyyy
+//     phones: [
+//         {
+//             phone: "+995 (551) 12-13-73", // +995 (XXX) XX-XX-XX
+//             primary: false,
+//         }
+//     ],
+//     sex: "male", // male OR female
+//     description: "Basketball player"
+// }
+// const data2 = {
+//     name: {
+//         first: "Cristiano",
+//         last: "Ronaldo"
+//     },
+//     dateOfBirth: "11-04-1988", // dd-mm-yyyy
+//     phones: [
+//         {
+//             phone: "+995 (566) 23-13-77", // +995 (XXX) XX-XX-XX
+//             primary: true,
+//         }
+//     ],
+//     sex: "male", // male OR female
+//     description: "Football player"
+// }
+// // Create a new pupil
+// const pupil = pupils.add(data);
+// const pupil2 = pupils.add(data2);
+// groups.addPupil(groupId, pupil);
+// groups.addPupil(groupId, pupil2);
+// // groups.removePupil(groupId, pupil.id)
+// groups.update(groupId, {room:299})
+// groups.read(groupId)
+// groups.readAll()
