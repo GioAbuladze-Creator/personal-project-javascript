@@ -160,7 +160,7 @@ const data = {
     phones: [
         {
             phone: "+995 (551) 12-13-73", // +995 (XXX) XX-XX-XX
-            primary: false,
+            primary: true,
         }
     ],
     sex: "male", // male OR female
@@ -205,7 +205,7 @@ let teacher1 = {
     emails: [
         {
             email: "maths@gmail.com",
-            primary: false,
+            primary: true,
         }
     ],
     phones: [
@@ -230,12 +230,12 @@ const history = {
 const math = {
     title: 'Math',
     lessons: 30,
-    desc: 'math is fun'
+    description: 'math is fun'
 };
 const physics = {
     title: 'Physics',
     lessons: 15,
-    desc: 'physics is dangerous',
+    description: 'physics is dangerous',
 };
 
 const subjectId = subjects.add(history);
