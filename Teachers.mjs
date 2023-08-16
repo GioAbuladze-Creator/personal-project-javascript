@@ -2,7 +2,7 @@ import Persons from './Persons.mjs';
 export default class Teachers extends Persons {
     #required = ['name', 'dateOfBirth', 'emails', 'phones', 'sex', 'subjects'];
     #validateId(id) {
-        if (typeof id !== "string"){
+        if (typeof id !== "string") {
             throw new Error("read method accepts id as a string");
         }
     }
@@ -13,12 +13,12 @@ export default class Teachers extends Persons {
     }
     #teacherValidation(teacher, allRequired = true) {
         this.#validateObject(teacher, 'Teacher');
-        for(let key of Object.keys(teacher)){
-            if(!this.#required.includes(key)&&key!=='description'){
-                throw new Error(`Invalid ${key}`)
+        for (let key of Object.keys(teacher)) {
+            if (!this.#required.includes(key) && key !== 'description') {
+                throw new Error(`Invalid property: ${key}`)
             }
         }
-        
+
         if (allRequired) {
             for (let key of this.#required) {
                 if (!teacher.hasOwnProperty(key)) {
@@ -34,7 +34,7 @@ export default class Teachers extends Persons {
             for (let email of teacher.emails) {
                 let regex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
                 this.#validateObject(email, 'Email');
-                if(Object.keys(email).length!=2){
+                if (Object.keys(email).length != 2) {
                     throw new Error('Invalid Email')
                 }
                 if (!email.hasOwnProperty('email') || typeof email.email !== 'string' || email.email.length === 0 || !regex.test(email.email)) {
@@ -50,9 +50,9 @@ export default class Teachers extends Persons {
             throw new Error('Invalid Subjects')
         }
         if (teacher.subjects) {
-            for (let subject of teacher.subjects) {                
+            for (let subject of teacher.subjects) {
                 this.#validateObject(subject, 'Subject');
-                if(Object.keys(subject).length!=1){
+                if (Object.keys(subject).length != 1) {
                     throw new Error('Invalid Subject')
                 }
                 if (!subject.hasOwnProperty('subject') || typeof subject.subject !== 'string' || subject.subject.length === 0) {
@@ -70,11 +70,48 @@ export default class Teachers extends Persons {
     }
     update(id, teacher) {
         // custom validation
-        this.#validateId(id);
         this.#teacherValidation(teacher, false);
 
-        super.update(id, teacher);
+        return super.update(id, teacher);
     }
 
 }
 
+let teacher1 = {
+    name: {
+        first: "Gio",
+        last: "Carvanjo",
+    },
+    dateOfBirth: "14-8-2023",
+    emails: [
+        {
+            email: "maths@gmail.com",
+            primary: false,
+        }
+    ],
+    phones: [
+        {
+            phone: "+995 (557) 07-88-87", // +995 (XXX) XX-XX-XX
+            primary: true,
+        }
+    ],
+    sex: "Female",
+    subjects: [
+        {
+            subject: "History",
+        },
+        {
+            subject: "s",
+            subject: "s",
+        }
+    ],
+    description: "Have Fun!",
+}
+let teachers = new Teachers();
+let teacherId= teachers.add(teacher1);
+console.log(teacherId)
+console.log(teachers.read(teacherId))
+teachers.update(teacherId, {name: {first: "zuzu", last: "zuzuzuzu"}})
+console.log(teachers.read(teacherId))
+teachers.remove(teacherId)
+console.log(teachers.read(teacherId))

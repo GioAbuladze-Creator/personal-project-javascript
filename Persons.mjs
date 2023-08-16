@@ -26,7 +26,9 @@ export default class Persons {
         this.#validateObject(person.name, "Name");
 
         if(person.name){
-
+            if(Object.keys(person.name).length != 2){
+                throw new Error("Invalid name")
+            }
             if(!person.name.hasOwnProperty('first') || typeof person.name.first !== 'string' || person.name.first.length == 0) {
                 throw new Error("Invalid first name")
             }
@@ -87,6 +89,9 @@ export default class Persons {
     }
     // to use it outside of class
     static personValidator(person) {
+        if(arguments.length!=1){
+            throw new Error("Invalid number of arguments");
+        }
         const instance = new Persons();
         instance.#personValidation(person);
     }
@@ -131,9 +136,7 @@ export default class Persons {
         if (arguments.length != 2) {
             throw new Error("Invalid number of arguments");
         }
-        if (typeof id != "string") {
-            throw new Error("Invalid type of arguments");
-        }
+       this.#validateId(id);
 
         // validations
         this.#validateId(id);
