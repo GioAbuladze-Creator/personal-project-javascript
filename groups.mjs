@@ -100,8 +100,7 @@ export default class Groups {
     }
 
 }
-
-
+// For testing
 // let groups = new Groups();
 // let groupId = groups.add(100);
 // let groupId2 = groups.add(777);
@@ -116,7 +115,7 @@ export default class Groups {
 //     phones: [
 //         {
 //             phone: "+995 (551) 12-13-73", // +995 (XXX) XX-XX-XX
-//             primary: false,
+//             primary: true,
 //         }
 //     ],
 //     sex: "male", // male OR female
@@ -142,7 +141,7 @@ export default class Groups {
 // const pupil2 = pupils.add(data2);
 // groups.addPupil(groupId, pupil);
 // groups.addPupil(groupId, pupil2);
-// // groups.removePupil(groupId, pupil.id)
+// groups.removePupil(groupId, pupil.id)
 // groups.update(groupId, {room:299})
 // groups.read(groupId)
-// groups.readAll()
+// console.log(groups.readAll())
