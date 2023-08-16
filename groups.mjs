@@ -75,6 +75,12 @@ export default class Groups {
         if (!room || typeof room !== "object" || room == null || Array.isArray(room)) {
             throw new Error("Room must be a proper object");
         }
+        if (!room.hasOwnProperty("room")) {
+            throw new Error("Room must have a room property");
+        }
+        if (typeof room.room !== "number" || room.room < 0) {
+            throw new Error("Room must be a number");
+        }
         this.#groups.get(groupId).room = room.room;
     }
     read(groupId) {
