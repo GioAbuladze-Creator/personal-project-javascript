@@ -1,11 +1,6 @@
 import Persons from './Persons.mjs';
 export default class Teachers extends Persons {
     #required = ['name', 'dateOfBirth', 'emails', 'phones', 'sex', 'subjects'];
-    #validateId(id) {
-        if (typeof id !== "string") {
-            throw new Error("read method accepts id as a string");
-        }
-    }
     #validateObject(object, name) {
         if (typeof object !== "object" || object == null || Array.isArray(object)) {
             throw new Error(`${name} must be an object`);
@@ -31,6 +26,9 @@ export default class Teachers extends Persons {
             throw new Error('Invalid Emails')
         }
         if (teacher.emails) {
+            if(teacher.emails.length==1 && teacher.emails[0].primary==false){
+                throw new Error('Email should be primary')
+            }
             for (let email of teacher.emails) {
                 let regex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
                 this.#validateObject(email, 'Email');
@@ -77,41 +75,39 @@ export default class Teachers extends Persons {
 
 }
 
-let teacher1 = {
-    name: {
-        first: "Gio",
-        last: "Carvanjo",
-    },
-    dateOfBirth: "14-8-2023",
-    emails: [
-        {
-            email: "maths@gmail.com",
-            primary: false,
-        }
-    ],
-    phones: [
-        {
-            phone: "+995 (557) 07-88-87", // +995 (XXX) XX-XX-XX
-            primary: true,
-        }
-    ],
-    sex: "Female",
-    subjects: [
-        {
-            subject: "History",
-        },
-        {
-            subject: "s",
-            subject: "s",
-        }
-    ],
-    description: "Have Fun!",
-}
-let teachers = new Teachers();
-let teacherId= teachers.add(teacher1);
-console.log(teacherId)
-console.log(teachers.read(teacherId))
-teachers.update(teacherId, {name: {first: "zuzu", last: "zuzuzuzu"}})
-console.log(teachers.read(teacherId))
-teachers.remove(teacherId)
-console.log(teachers.read(teacherId))
+// For testing:
+// let teacher1 = {
+//     name: {
+//         first: "Gio",
+//         last: "Carvanjo",
+//     },
+//     dateOfBirth: "14-8-2023",
+//     emails: [
+//         {
+//             email: "maths@gmail.com",
+//             primary: true,
+//         }
+//     ],
+//     phones: [
+//         {
+//             phone: "+995 (557) 07-88-87", // +995 (XXX) XX-XX-XX
+//             primary: true,
+//         }
+//     ],
+//     sex: "Female",
+//     subjects: [
+//         {
+//             subject: "History",
+//         },
+//         {
+//             subject: "s",
+//         }
+//     ],
+//     description: "Have Fun!",
+// }
+// let teachers = new Teachers();
+// let teacherId= teachers.add(teacher1);
+// console.log(teachers.read(teacherId))
+// teachers.update(teacherId, {name: {first: "zuzu", last: "zuzuzuzu"}})
+// console.log(teachers.read(teacherId))
+// teachers.remove(teacherId)

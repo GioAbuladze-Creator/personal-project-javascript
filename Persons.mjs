@@ -59,8 +59,15 @@ export default class Persons {
         }
         if(person.phones){
             let regex=/^\+995\s\([0-9]{3}\)\s[0-9]{2}-[0-9]{2}-[0-9]{2}$/;
+            if(person.phones.length==0){
+                throw new Error("Invalid phones")
+            }
+            if(person.phones.length==1 && person.phones[0].primary==false){
+                throw new Error("Number should be primary")
+            }
             for(let phone of person.phones){
                 this.#validateObject(phone, "Phone");
+                
                 if(Object.keys(phone).length != 2){
                     throw new Error("Invalid phones")
                 }
