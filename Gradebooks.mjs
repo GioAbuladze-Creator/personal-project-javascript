@@ -25,8 +25,10 @@ export default class Gradebooks {
         this.#gradebooks = new Map();
     }
     add(groupId) {
+        if (arguments.length !== 1) {
+            throw new Error("Invalid number of arguments");
+        }
         this.#validateId(groupId);
-
         for (let { id, room, pupils } of this.groups.readAll()) {
             if (id === groupId) {
                 this.#gradebooks.set(id, { id, room, pupils });
@@ -40,6 +42,9 @@ export default class Gradebooks {
     }
     clear() {
         // Destroy all data inside the gradebook
+        if(arguments.length !== 0) {
+            throw new Error("Invalid number of arguments");
+        }
         this.#gradebooks.clear();
     }
     addRecord(gradebookId, record) {
@@ -141,6 +146,8 @@ export default class Gradebooks {
         throw new Error("Gradebook not found");
     }
 }
+
+
 const groups = new Groups();
 const teachers = new Teachers();
 const subjects = new Subjects();
@@ -192,7 +199,6 @@ groups.update(groupId, { room: 299 })
 const gradebooks = new Gradebooks(groups, teachers, subjects);
 let gradebookId = gradebooks.add(groupId);
 let gradebookId2 = gradebooks.add(groupId2);
-// gradebooks.clear();
 // console.log(gradebooks.readAll(gradebookId));
 
 
@@ -261,3 +267,5 @@ gradebooks.addRecord(gradebookId, record2);
 
 // console.log(gradebooks.read(gradebookId, pupil.id));
 console.log(gradebooks.readAll(gradebookId));
+
+// gradebooks.clear(2);
