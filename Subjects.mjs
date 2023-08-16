@@ -1,6 +1,14 @@
 export default class Subjects {
     #subjectList;
-    #checkIfValid(subj){
+    #checkValidFields(subj) {
+        let validFields = ['title', 'lessons','description'];
+        for(let i in subj){
+            if(!validFields.includes(i)){
+                throw new Error('Invalid Object property: '+i)
+            }
+        }
+    }
+    #checkSubject(subj){
         if (typeof subj !== 'object' || Array.isArray(subj) || subj === null || Object.keys(subj) == 0) {
             throw new Error("Invalid Object")
         }
@@ -12,7 +20,7 @@ export default class Subjects {
         }
         if(subj.hasOwnProperty('description')&&typeof subj.description !== 'string'){
             throw new Error('Invalid Object')
-        }
+        }    
     }
     constructor() {
         this.#subjectList = new Map();
@@ -21,8 +29,9 @@ export default class Subjects {
         if(arguments.length !== 1){
             throw new Error('Invalid arguments');
         }
-        this.#checkIfValid(subj);
-
+        this.#checkSubject(subj);
+        this.#checkValidFields(subj);
+        
         // checks subject title and lesson number and throws error if subject already exists
         for(let i of this.#subjectList.values()){
             if(i.title === subj.title&&i.lessons === subj.lessons&&i.description === subj.description){
@@ -50,7 +59,8 @@ export default class Subjects {
         if (arguments.length !== 1) {
             throw new Error('Invalid arguments');
         }
-        this.#checkIfValid(subj);
+        this.#checkSubject(subj);
+        this.#checkValidFields(subj);
         
         for(let i of this.#subjectList.values()){
             if(subj.title===i.title){
@@ -72,28 +82,3 @@ export default class Subjects {
     }
 
 }
-
-// const history = {
-//     title: 'History',
-//     lessons: 24
-// };
-// const math = {
-//     title: 'Math',
-//     lessons: 30,
-//     desc:'math is fun'
-// };
-// const physics = {
-//     title: 'Physics',
-//     lessons: 15,
-//     desc:'physics is dangerous',
-// };
-
-// const subjects = new Subjects();
-
-// const id = subjects.add(history); 
-// const id2 = subjects.add(math); 
-// const id3 = subjects.add(physics); 
-// subjects.readAll();
-// console.log(subjects.verify(math));
-// subjects.remove(id2);
-// subjects.readAll();
