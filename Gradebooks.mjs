@@ -31,10 +31,7 @@ export default class Gradebooks {
         this.#validateId(groupId);
         for (let { id, room, pupils } of this.groups.readAll()) {
             if (id === groupId) {
-                this.#gradebooks.set(id, { id, room, pupils });
-                for (let pupil of pupils) {
-                    pupil.records = [];
-                }
+                this.#gradebooks.set(id, { id, room, pupils , records:[]});
                 return id;
             }
         }
@@ -75,9 +72,12 @@ export default class Gradebooks {
         }
         // check if pupil exists
         let pupilFound = false;
+        let pupilName = '';
+        
         for (let pupil of this.groups.read(gradebookId).pupils) {
             if (pupil.id === pupilId) {
                 pupilFound = true;
+                pupilName = pupil.name.first + ' ' + pupil.name.last;
                 break;
             }
         }
@@ -112,13 +112,16 @@ export default class Gradebooks {
         }
         // add finalRecord as a record in gradebook on pupil name
         // check if pupil record already exists
-        let pupilRecords = this.#gradebooks.get(gradebookId).pupils.find(pupil => pupil.id === pupilId).records;
-        for (let rec of pupilRecords) {
+        
+        for (let rec of this.#gradebooks.get(gradebookId).records) {
             if (rec.teacher == finalRecord.teacher && rec.lesson === finalRecord.lesson && rec.subject === finalRecord.subject && rec.mark === finalRecord.mark) {
                 throw new Error("Record already exists");
             }
         }
-        this.#gradebooks.get(gradebookId).pupils.find(pupil => pupil.id === pupilId).records.push({...finalRecord});
+        this.#gradebooks.get(gradebookId).records.push({
+            pupil: pupilName,
+            id: pupilId,
+            ...finalRecord});
     }
     read(gradebookId, pupilId) {
         if (arguments.length !== 2) {
@@ -133,9 +136,20 @@ export default class Gradebooks {
         // check if pupil exists
         for (let pupil of this.#gradebooks.get(gradebookId).pupils) {
             if (pupil.id === pupilId) {
+                let unfilteredRecord= this.#gradebooks.get(gradebookId).records.filter(record => record.id === pupilId)
+                let filteredRecord=[];
+                for (let record of unfilteredRecord) {
+                    filteredRecord.push({
+                        teacher: record.teacher,
+                        subject: record.subject,
+                        lesson: record.lesson,
+                        mark: record.mark
+                    })
+                }
+
                 return {
                     name: pupil.name.first + ' ' + pupil.name.last,
-                    records: pupil.records
+                    records:filteredRecord
                 };
             }
         }
@@ -259,7 +273,7 @@ const subjectId = subjects.add(history);
 const subjectId2 = subjects.add(math);
 const subjectId3 = subjects.add(physics);
 const record = {
-    pupilId: pupil2.id,
+    pupilId: pupil.id,
     teacherId: teacherId,
     subjectId: subjectId,
     lesson: 1,
@@ -276,7 +290,7 @@ const record2 = {
 gradebooks.addRecord(gradebookId, record);
 gradebooks.addRecord(gradebookId, record2);
 
-// console.log(gradebooks.read(gradebookId, pupil.id));
-console.log(gradebooks.readAll(gradebookId));
+console.log(gradebooks.read(gradebookId, pupil.id));
+// console.log(gradebooks.readAll(gradebookId));
 
 // gradebooks.clear(2);
