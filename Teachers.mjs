@@ -100,12 +100,7 @@ let teacher1 = {
         {
             phone: "+995 (557) 07-88-87", // +995 (XXX) XX-XX-XX
             primary: true,
-        },
-        {
-            phone: "+995 (527) 07-88-87", // +995 (XXX) XX-XX-XX
-            primary: true,
-        },
-        
+        }        
     ],
     sex: "Female",
     subjects: [
@@ -118,9 +113,9 @@ let teacher1 = {
     ],
     description: "Have Fun!",
 }
-let teachers = new Teachers();
-let teacherId= teachers.add(teacher1);
-console.log(teachers.read(teacherId))
-teachers.update(teacherId, {name: {first: "zuzu", last: "zuzuzuzu"}})
-console.log(teachers.read(teacherId))
-teachers.remove(teacherId)
+// let teachers = new Teachers();
+// let teacherId= teachers.add(teacher1);
+// console.log(teachers.read(teacherId))
+// teachers.update(teacherId, {name: {first: "zuzu", last: "zuzuzuzu"}})
+// console.log(teachers.read(teacherId))
+// teachers.remove(teacherId)
