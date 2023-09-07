@@ -74,15 +74,21 @@ export default class Gradebooks {
             throw new Error("Invalid mark");
         }
         // check if pupil exists
+        let pupilFound = false;
         for (let pupil of this.groups.read(gradebookId).pupils) {
             if (pupil.id === pupilId) {
+                pupilFound = true;
                 break;
             }
+        }
+        if (!pupilFound) {
             throw new Error("Pupil not found");
         }
 
         let finalRecord = {};
         // check if teacher has this subject
+
+        let subjectFound = false;
         for (let subject of subjects.readAll()) {
             if (subject.id === subjectId) {
                 for (let subj of this.teachers.read(teacherId).subjects) {
@@ -94,12 +100,14 @@ export default class Gradebooks {
                             lesson: record.lesson,
                             mark: record.mark
                         }
+                        subjectFound = true;
                         break;
                     }
-                    throw new Error('Teacher does not have this subject')
                 }
                 break;
             }
+        }
+        if (!subjectFound) {
             throw new Error("Subject not found in subjects");
         }
         // add finalRecord as a record in gradebook on pupil name
@@ -223,6 +231,9 @@ let teacher1 = {
     sex: "MALE",
     subjects: [
         {
+            subject: "XIMIA",
+        },
+        {
             subject: "History",
         }
     ],
@@ -248,7 +259,7 @@ const subjectId = subjects.add(history);
 const subjectId2 = subjects.add(math);
 const subjectId3 = subjects.add(physics);
 const record = {
-    pupilId: pupil.id,
+    pupilId: pupil2.id,
     teacherId: teacherId,
     subjectId: subjectId,
     lesson: 1,
