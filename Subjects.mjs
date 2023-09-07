@@ -82,13 +82,13 @@ export default class Subjects {
     }
 
 }
-let subjects = new Subjects();
-const history = {
-    title: 'History',
-    lessons: 24
-};
-let subjectId=subjects.add(history);
-subjects.verify(history);
-console.log(subjects.readAll());
-subjects.remove(subjectId);
-console.log(subjects.readAll());
+// let subjects = new Subjects();
+// const history = {
+//     title: 'History',
+//     lessons: 24
+// };
+// let subjectId=subjects.add(history);
+// subjects.verify(history);
+// // console.log(subjects.readAll());
+// subjects.remove(subjectId);
+// // console.log(subjects.readAll());
