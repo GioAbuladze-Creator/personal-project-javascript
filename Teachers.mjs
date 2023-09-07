@@ -29,6 +29,7 @@ export default class Teachers extends Persons {
             if(teacher.emails.length==1 && teacher.emails[0].primary==false){
                 throw new Error('Email should be primary')
             }
+            let primaryCount=0;
             for (let email of teacher.emails) {
                 let regex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+$/;
                 this.#validateObject(email, 'Email');
@@ -41,6 +42,12 @@ export default class Teachers extends Persons {
                 if (!email.hasOwnProperty('primary') || typeof email.primary !== 'boolean') {
                     throw new Error('Invalid Email')
                 }
+                if(email.primary){
+                    primaryCount++;
+                }
+            }
+            if(primaryCount!=1){
+                throw new Error('Only one email should be primary')
             }
         }
         // check subjects
@@ -76,38 +83,44 @@ export default class Teachers extends Persons {
 }
 
 // For testing:
-// let teacher1 = {
-//     name: {
-//         first: "Gio",
-//         last: "Carvanjo",
-//     },
-//     dateOfBirth: "14-8-2023",
-//     emails: [
-//         {
-//             email: "maths@gmail.com",
-//             primary: true,
-//         }
-//     ],
-//     phones: [
-//         {
-//             phone: "+995 (557) 07-88-87", // +995 (XXX) XX-XX-XX
-//             primary: true,
-//         }
-//     ],
-//     sex: "Female",
-//     subjects: [
-//         {
-//             subject: "History",
-//         },
-//         {
-//             subject: "s",
-//         }
-//     ],
-//     description: "Have Fun!",
-// }
-// let teachers = new Teachers();
-// let teacherId= teachers.add(teacher1);
-// console.log(teachers.read(teacherId))
-// teachers.update(teacherId, {name: {first: "zuzu", last: "zuzuzuzu"}})
-// console.log(teachers.read(teacherId))
-// teachers.remove(teacherId)
+let teacher1 = {
+    name: {
+        first: "Gio",
+        last: "Carvanjo",
+    },
+    dateOfBirth: "14-8-2023",
+    emails: [
+        {
+            email: "maths@gmail.com",
+            primary: true,
+        }
+        
+    ],
+    phones: [
+        {
+            phone: "+995 (557) 07-88-87", // +995 (XXX) XX-XX-XX
+            primary: true,
+        },
+        {
+            phone: "+995 (527) 07-88-87", // +995 (XXX) XX-XX-XX
+            primary: true,
+        },
+        
+    ],
+    sex: "Female",
+    subjects: [
+        {
+            subject: "History",
+        },
+        {
+            subject: "s",
+        }
+    ],
+    description: "Have Fun!",
+}
+let teachers = new Teachers();
+let teacherId= teachers.add(teacher1);
+console.log(teachers.read(teacherId))
+teachers.update(teacherId, {name: {first: "zuzu", last: "zuzuzuzu"}})
+console.log(teachers.read(teacherId))
+teachers.remove(teacherId)

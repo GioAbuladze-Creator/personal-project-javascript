@@ -65,9 +65,12 @@ export default class Persons {
             if(person.phones.length==1 && person.phones[0].primary==false){
                 throw new Error("Number should be primary")
             }
+            let primaryCount=0;
             for(let phone of person.phones){
+
                 this.#validateObject(phone, "Phone");
                 
+
                 if(Object.keys(phone).length != 2){
                     throw new Error("Invalid phones")
                 }
@@ -77,6 +80,13 @@ export default class Persons {
                 if(!regex.test(phone.phone)){
                     throw new Error("Invalid phone number")
                 }
+                if(phone.primary){
+                    primaryCount++;
+                }
+
+            }
+            if(primaryCount!=1){
+                throw new Error("Only one number should be primary")
             }
         }
         //sex validation
