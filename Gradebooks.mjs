@@ -89,7 +89,7 @@ export default class Gradebooks {
         // check if teacher has this subject
 
         let subjectFound = false;
-        for (let subject of subjects.readAll()) {
+        for (let subject of this.subjects.readAll()) {
             if (subject.id === subjectId) {
                 for (let subj of this.teachers.read(teacherId).subjects) {
                     if (subj.subject === subject.title) {
@@ -290,7 +290,7 @@ const record2 = {
 gradebooks.addRecord(gradebookId, record);
 gradebooks.addRecord(gradebookId, record2);
 
-console.log(gradebooks.read(gradebookId, pupil.id));
+// console.log(gradebooks.read(gradebookId, pupil.id));
 // console.log(gradebooks.readAll(gradebookId));
 
 // gradebooks.clear(2);
