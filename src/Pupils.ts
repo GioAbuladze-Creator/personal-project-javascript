@@ -2,6 +2,27 @@ import { Persons } from "./Persons";
 import { Person } from "./Persons";
 
 export default class Pupils extends Persons{
+    private validatePupil(pupil:Person,allrequired:boolean=true):void{
+        let required=['name','dateOfBirth','phones','sex'];
+        for(let key of Object.getOwnPropertyNames(pupil)){
+            if(!required.includes(key) && key!='description'){
+                throw new Error(`Invalid pupil`);
+            }
+        }
+        if(allrequired){
+            for(let key of required){
+                if(!pupil.hasOwnProperty(key)){
+                    throw new Error(`Invalid pupil`);
+                }
+            }
+        }
+        Persons.validateName(pupil as Person);
+        Persons.validateDate(pupil as Person);
+        Persons.validatePhone(pupil as  Person);
+        Persons.validateSex(pupil as Person);
+        Persons.validateDescription(pupil as Person) ;
+
+    }
     constructor(){
         super();
     }
@@ -11,9 +32,7 @@ export default class Pupils extends Persons{
                 throw new Error('Person already exists');
             }
         }
-        Persons.validateDate(pupil);
-        Persons.validatePhone(pupil);
-        Persons.validateSex(pupil);
+        this.validatePupil(pupil);
 
         let id = Math.random().toString(36).slice(2);
         let pupilFormated:Person&{id:string} = {id,...pupil};
@@ -30,15 +49,7 @@ export default class Pupils extends Persons{
     }
     update(id:string,person:Partial<Person>):void{
         if(this.persons.has(id)){
-            if(person.dateOfBirth){
-                Persons.validateDate(person as Person); ;
-            }
-            if(person.phones){
-                Persons.validatePhone(person as Person);
-            }
-            if(person.sex){
-                Persons.validateSex(person as Person);
-            }
+            this.validatePupil(person as Person,false);
             this.persons.set(id,{...this.persons.get(id),...person} as Person);
         }else{
             throw new Error('Person does not exist');
@@ -50,6 +61,7 @@ let pupil1= pupils.add({
     name: {
         first: 'John',
         last: 'Doe',
+        
     },
     dateOfBirth: '01-01-1999',
     phones: [
@@ -57,6 +69,7 @@ let pupil1= pupils.add({
         {phone:'+995 (599) 22-11-99',primary:false},
     ],
     sex:'male',
+    
     
 })
 

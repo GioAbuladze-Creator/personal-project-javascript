@@ -7,19 +7,58 @@ interface Teacher extends Person{
         
 export default class Teachers extends Persons{
     private validateEmail(person:Teacher):void{
-        let primaryEmail=0;
-        for(let email of person.emails){
-            let emailRegex=/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-            if(!emailRegex.test(email.email)){
-                throw new Error('Invalid email');
+        if(person.emails){
+            let primaryEmail=0;
+            for(let email of person.emails){
+                if(Object.keys(email).length!=2){
+                    throw new Error('Invalid email');
+                }
+                let emailRegex=/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+                if(!emailRegex.test(email.email)){
+                    throw new Error('Invalid email');
+                }
+                if(email.primary){
+                    primaryEmail++;
+                }
             }
-            if(email.primary){
-                primaryEmail++;
+            if(primaryEmail!==1){
+                throw new Error('Invalid primary email');
             }
         }
-        if(primaryEmail!==1){
-            throw new Error('Invalid primary email');
+    }
+    private validateSubject(person:Teacher):void{
+        if(person.subjects){
+            for(let subject of person.subjects){
+                if(Object.keys(subject).length!=1){
+                    throw new Error('Invalid subject');
+                }
+                if(!subject.subject){
+                    throw new Error('Invalid subject');
+                }
+            }
         }
+    }
+    private validateTeacher(teacher:Teacher,allrequired:boolean=true):void{
+        let required=['name','dateOfBirth','phones','sex','emails','subjects'];
+        for(let key of Object.getOwnPropertyNames(teacher)){
+            if(!required.includes(key) && key!='description'){
+                throw new Error(`Invalid teacher`);
+            }
+        }
+        if(allrequired){
+            for(let key of required){
+                if(!teacher.hasOwnProperty(key)){
+                    throw new Error(`Invalid teacher`);
+                }
+            }
+        }
+        Persons.validateName(teacher);
+        Persons.validateDate(teacher);
+        this.validateEmail(teacher);
+        Persons.validatePhone(teacher);
+        Persons.validateSex(teacher);
+        this.validateSubject(teacher);
+        Persons.validateDescription(teacher);
     }
     constructor(){
         super();
@@ -30,11 +69,7 @@ export default class Teachers extends Persons{
                 throw new Error('Person already exists');
             }
         }
-        Persons.validateDate(teacher);
-        Persons.validatePhone(teacher);
-        Persons.validateSex(teacher);
-        
-        this.validateEmail(teacher);
+        this.validateTeacher(teacher);
         let id = Math.random().toString(36).slice(2);
         let teacherFormated:Teacher&{id:string} = {id,...teacher};
         this.persons.set(id,teacherFormated);
@@ -50,18 +85,7 @@ export default class Teachers extends Persons{
     }
     update(id:string,person:Partial<Teacher>):void{
         if(this.persons.has(id)){
-            if(person.dateOfBirth){
-                Persons.validateDate(person as Person); ;
-            }
-            if(person.phones){
-                Persons.validatePhone(person as Person);
-            }
-            if(person.sex){
-                Persons.validateSex(person as Person);
-            }
-            if(person.emails){
-                this.validateEmail(person as Teacher);
-            }
+            this.validateTeacher(person as Teacher,false);
             this.persons.set(id,{...this.persons.get(id),...person} as Teacher);
         }else{
             throw new Error('Person does not exist');
