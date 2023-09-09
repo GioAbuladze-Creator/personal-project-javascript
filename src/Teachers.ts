@@ -80,7 +80,7 @@ export default class Teachers extends Persons{
         if(this.persons.has(id)){            
             return this.persons.get(id) as Teacher;
         }else{
-            throw new Error('Person does not exist');  
+            throw new Error('Teacher does not exist');  
         }        
     }
     update(id:string,person:Partial<Teacher>):void{
