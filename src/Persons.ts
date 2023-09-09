@@ -76,12 +76,39 @@ export abstract class Persons{
             }
         }
     }
+    public static validatePupil(pupil:Person,allrequired:boolean=true,id:boolean=false):void{
+        let required:string[];
+        if(id){
+            required=['name','dateOfBirth','phones','sex','id'];
+        }else{
+            required=['name','dateOfBirth','phones','sex'];
+        }
+
+        for(let key of Object.getOwnPropertyNames(pupil)){
+            if(!required.includes(key) && key!='description'){
+                throw new Error(`Invalid pupil`);
+            }
+        }
+        if(allrequired){
+            for(let key of required){
+                if(!pupil.hasOwnProperty(key)){
+                    throw new Error(`Invalid pupil`);
+                }
+            }
+        }
+        Persons.validateName(pupil as Person);
+        Persons.validateDate(pupil as Person);
+        Persons.validatePhone(pupil as  Person);
+        Persons.validateSex(pupil as Person);
+        Persons.validateDescription(pupil as Person) ;
+
+    }
     constructor(){
         this.persons = new Map();
     }
     abstract read(id:string):object;
     abstract update(id:string,person:object):void;
-    remove(id:string):void{
+    protected remove(id:string):void{
         if(this.persons.has(id)){
             this.persons.delete(id);
         }else{

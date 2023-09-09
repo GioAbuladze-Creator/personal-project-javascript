@@ -94,7 +94,7 @@ export default class Teachers extends Persons{
 
 }   
 
-let teachers=new Teachers();
+// let teachers=new Teachers();
 let teacher1 = {
     name: {
         first: "Gio",
@@ -124,8 +124,8 @@ let teacher1 = {
     ],
     description: "Have Fun!",
 }
-let teacherId=teachers.add(teacher1);
-console.log(teachers.read(teacherId))
-// teachers.remove(teacherId);
-teachers.update(teacherId,{phones:[{phone:'+995 (777) 77-77-77',primary:true}],name:{first:'Michael',last:'Jackson'}});
-console.log(teachers.read(teacherId))
+// let teacherId=teachers.add(teacher1);
+// console.log(teachers.read(teacherId))
+// // teachers.remove(teacherId);
+// teachers.update(teacherId,{phones:[{phone:'+995 (777) 77-77-77',primary:true}],name:{first:'Michael',last:'Jackson'}});
+// console.log(teachers.read(teacherId))
