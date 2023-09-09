@@ -51,18 +51,18 @@ export default class Subjects {
         return arr;
     }
 }
-let subjects = new Subjects();
-const history = {
-    title: 'History',
-    lessons: 24
-};
-const math = {
-    title: 'Math',
-    lessons: 30,
-    description:'Hello Math'
-};
-let subjId1=subjects.add(history);
-let subjId2=subjects.add(math);
-// subjects.remove(subjId2);
-console.log(subjects.verify(history));
-console.log(subjects.readAll());
+// let subjects = new Subjects();
+// const history = {
+//     title: 'History',
+//     lessons: 24
+// };
+// const math = {
+//     title: 'Math',
+//     lessons: 30,
+//     description:'Hello Math'
+// };
+// let subjId1=subjects.add(history);
+// let subjId2=subjects.add(math);
+// // subjects.remove(subjId2);
+// console.log(subjects.verify(history));
+// console.log(subjects.readAll());
