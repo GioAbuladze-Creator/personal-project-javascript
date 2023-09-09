@@ -51,18 +51,18 @@ export default class Groups {
         let index = group.pupils.findIndex((pupil) => pupil.id === pupilId);
         group.pupils.splice(index, 1);
     }
-    update(groupId:string,room:number):void{
-        this.roomValidation(room);
+    update(groupId:string,room:{room:number}):void{
+        this.roomValidation(room.room);
         let group = this.groups.get(groupId);
         if (!group) {
             throw new Error("Group not found");
         }
         for (let roomObj of this.groups.values()) {
-            if (roomObj.room === room) {
+            if (roomObj.room === room.room) {
                 throw new Error("Room already exists");
             }
         }
-        group.room = room;
+        group.room = room.room;
     }
     read(groupId:string):{id:string,room:number,pupils:Array<Person&{id:string}>}{
         let group = this.groups.get(groupId);
@@ -80,50 +80,50 @@ export default class Groups {
     }
     
 }
-let groups = new Groups();
-let groupId = groups.add(2);
-let groupId2 = groups.add(300);
-const data = {
-    name: {
-        first: "Cristiano",
-        last: "Ronaldo"
-    },
-    dateOfBirth: "11-04-1988", // dd-mm-yyyy
-    phones: [
-        {
-            phone: "+995 (566) 23-13-77", // +995 (XXX) XX-XX-XX
-            primary: true,
-        }
-    ],
-    sex: "male", // male OR female
-    description: "Football player",
-}
-const data2 = {
-    name: {
-        first: "Michael",
-        last: "Jordan"
-    },
-    dateOfBirth: "05-02-1970", // dd-mm-yyyy
-    phones: [
-        {
-            phone: "+995 (551) 12-13-73", // +995 (XXX) XX-XX-XX
-            primary: true,
-        }
-    ],
-    sex: "male", // male OR female
-    description: "Basketball player"
-}
-let pupils = new Pupils();
-let pupil1 = pupils.add(data);
-let pupil2 = pupils.add(data2);
-groups.addPupil(groupId, pupil1);
-groups.addPupil(groupId2, pupil1);
-groups.addPupil(groupId, pupil2);
-groups.addPupil(groupId2, pupil2);
-console.log(groups.read(groupId));
-groups.removePupil(groupId, pupil2.id);
-groups.update(groupId,200)
-console.log(groups.read(groupId));
-console.log(groups.readAll());
+// let groups = new Groups();
+// let groupId = groups.add(2);
+// let groupId2 = groups.add(300);
+// const data = {
+//     name: {
+//         first: "Cristiano",
+//         last: "Ronaldo"
+//     },
+//     dateOfBirth: "11-04-1988", // dd-mm-yyyy
+//     phones: [
+//         {
+//             phone: "+995 (566) 23-13-77", // +995 (XXX) XX-XX-XX
+//             primary: true,
+//         }
+//     ],
+//     sex: "male", // male OR female
+//     description: "Football player",
+// }
+// const data2 = {
+//     name: {
+//         first: "Michael",
+//         last: "Jordan"
+//     },
+//     dateOfBirth: "05-02-1970", // dd-mm-yyyy
+//     phones: [
+//         {
+//             phone: "+995 (551) 12-13-73", // +995 (XXX) XX-XX-XX
+//             primary: true,
+//         }
+//     ],
+//     sex: "male", // male OR female
+//     description: "Basketball player"
+// }
+// let pupils = new Pupils();
+// let pupil1 = pupils.add(data);
+// let pupil2 = pupils.add(data2);
+// groups.addPupil(groupId, pupil1);
+// groups.addPupil(groupId2, pupil1);
+// groups.addPupil(groupId, pupil2);
+// groups.addPupil(groupId2, pupil2);
+// console.log(groups.read(groupId));
+// groups.removePupil(groupId, pupil2.id);
+// groups.update(groupId,{room:200})
+// console.log(groups.read(groupId));
+// console.log(groups.readAll());
 
 
