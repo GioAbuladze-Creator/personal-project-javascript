@@ -10,135 +10,150 @@ interface Record {
     lesson: number,
     mark: number
 }
-type RecordType={
-    name:string,
-    records:Array<{teacher:string,subject:string,lesson:number,mark:number}>
+type RecordType = {
+    name: string,
+    records: Array<{ teacher: string, subject: string, lesson: number, mark: number }>
 }
-class Gradebooks{
+class Gradebooks {
     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! records
-    private gradebooks:Map<string,{id:string,room:number,pupils:Array<Person&{id:string}>,records:Array<RecordType>}>;
-    private groups:Groups;
-    private teachers:Teachers;
-    private subjects:Subjects;
-    private recordValidation(record:{pupilId:string,teacherId:string,subjectId:string,lesson:number,mark:number}):void{
-        if(!this.groups.readAll().find((i)=>i.pupils.find((j)=>j.id===record.pupilId))) {
+    private gradebooks: Map<string, { id: string, room: number, pupils: Array<Person & { id: string }>, records: Array<RecordType> }>;
+    private groups: Groups;
+    private teachers: Teachers;
+    private subjects: Subjects;
+    private recordValidation(record: { pupilId: string, teacherId: string, subjectId: string, lesson: number, mark: number }): void {
+        if (!this.groups.readAll().find((i) => i.pupils.find((j) => j.id === record.pupilId))) {
             throw new Error("Pupil not found");
         }
-        if(!this.teachers.read(record.teacherId)) {
+        if (!this.teachers.read(record.teacherId)) {
             throw new Error("Teacher not found");
         }
-        if(!this.subjects.readAll().find((i)=>i.id===record.subjectId)) {
+        if (!this.subjects.readAll().find((i) => i.id === record.subjectId)) {
             throw new Error("Subject not found");
         }
-        if(isNaN(record.lesson)){
+        if (isNaN(record.lesson)) {
             throw new Error("Lesson must be a number");
         }
-        if(record.lesson<0){
+        if (record.lesson < 0) {
             throw new Error("Lesson must be a positive number");
         }
-        if(isNaN(record.mark)){
+        if (isNaN(record.mark)) {
             throw new Error("Mark must be a number");
         }
-        if(record.mark<0){
+        if (record.mark < 0) {
             throw new Error("Mark must be a positive number");
         }
     }
-    constructor(groups:Groups,teachers:Teachers,subjects:Subjects){
-        this.groups=groups;
-        this.teachers=teachers;
-        this.subjects=subjects;        
-        this.gradebooks=new Map();
+    constructor(groups: Groups, teachers: Teachers, subjects: Subjects) {
+        this.groups = groups;
+        this.teachers = teachers;
+        this.subjects = subjects;
+        this.gradebooks = new Map();
     }
-    add(groupId:string){
-        for(let {id,room,pupils} of this.groups.readAll()){
-            if(id===groupId){
-                if(this.gradebooks.has(id)) {
+    add(groupId: string) {
+        for (let { id, room, pupils } of this.groups.readAll()) {
+            if (id === groupId) {
+                if (this.gradebooks.has(id)) {
                     throw new Error("Gradebook already exists");
                 }
-                this.gradebooks.set(id,{id,room,pupils,records:[]});
+                this.gradebooks.set(id, { id, room, pupils, records: [] });
                 return id
             }
         }
         throw new Error("Group not found");
     }
-    clear(){
+    clear() {
         this.gradebooks.clear();
     }
-    addRecord(gradebookId:string,record:Record):void{
-        let gradebook=this.gradebooks.get(gradebookId);
-        if(!gradebook){
+    addRecord(gradebookId: string, record: Record): void {
+        let gradebook = this.gradebooks.get(gradebookId);
+        if (!gradebook) {
             throw new Error("Gradebook not found");
         }
         this.recordValidation(record);
-        let {pupilId,teacherId,subjectId,lesson,mark}=record;
-        let pupil=gradebook.pupils.find((i)=>i.id===pupilId);
-        let teacher=this.teachers.read(teacherId);
-        let subject=this.subjects.readAll().find((i)=>i.id===subjectId);
-        let pupilName=pupil?.name.first+' '+pupil?.name.last;
-        let teacherName=teacher?.name.first+' '+teacher?.name.last;
+        let { pupilId, teacherId, subjectId, lesson, mark } = record;
+        let pupil = gradebook.pupils.find((i) => i.id === pupilId);
+        let teacher = this.teachers.read(teacherId);
+        let subject = this.subjects.readAll().find((i) => i.id === subjectId);
+        let pupilName = pupil?.name.first + ' ' + pupil?.name.last;
+        let teacherName = teacher?.name.first + ' ' + teacher?.name.last;
 
 
-        let subjectFound=false;
-        for(let subj of teacher.subjects){
+        let subjectFound = false;
+        for (let subj of teacher.subjects) {
             // maybe undefined
-            if(subject){
-                if(subj.subject===subject.title){
-                    subjectFound=true;
+            if (subject) {
+                if (subj.subject === subject.title) {
+                    subjectFound = true;
                     break;
                 }
             }
         }
-        if(!subjectFound){
+        if (!subjectFound) {
             throw new Error("Teacher doesn't teach this subject");
         }
-        
-        if(!pupil || !teacher || !subject || !lesson || !mark){
+
+        if (!pupil || !teacher || !subject || !lesson || !mark) {
             throw new Error("Invalid Record");
         }
-        for(let rec of gradebook.records){
-            if(rec.name===pupilName&&rec.records[0].lesson===lesson&&rec.records[0].subject===subject.title&&rec.records[0].teacher===teacherName){
-                throw new Error("Record already exists");
+        if (gradebook.records.length > 0) {
+            let pupilFound=false;
+            for (let rec of gradebook.records) {
+                if (rec.name === pupilName && rec.records[0].lesson === lesson && rec.records[0].subject === subject.title && rec.records[0].teacher === teacherName) {
+                    throw new Error("Record already exists");
+                }
+                if (rec.name === pupilName) {
+                    let recordObj = { teacher: teacher.name.first + ' ' + teacher.name.last, subject: subject.title, lesson, mark };
+                    rec.records.push(recordObj);
+                    pupilFound=true;
+                    break;
+                }
             }
+            if(!pupilFound){
+                let recordObj = { name: pupilName, records: [{ teacher: teacher.name.first + ' ' + teacher.name.last, subject: subject.title, lesson, mark }] }
+                gradebook.records.push(recordObj);
+            }
+        } else {
+            let recordObj = { name: pupilName, records: [{ teacher: teacher.name.first + ' ' + teacher.name.last, subject: subject.title, lesson, mark }] }
+            gradebook.records.push(recordObj)
         }
-        let recordObj = { name: pupil.name.first + ' ' + pupil.name.last, records: [{ teacher: teacher.name.first+' '+teacher.name.last, subject: subject.title, lesson, mark }] };
-        
-        gradebook.records.push(recordObj);
+
     }
-    read(gradebookId:string,pupilId:string):{name:string,records:{teacher:string,subject:string,lesson:number,mark:number}[]}{
-        let gradebook=this.gradebooks.get(gradebookId);
-        if(!gradebook){
+    read(gradebookId: string, pupilId: string): { name: string, records: { teacher: string, subject: string, lesson: number, mark: number }[] } {
+        let gradebook = this.gradebooks.get(gradebookId);
+        if (!gradebook) {
             throw new Error("Gradebook not found");
         }
-        let pupil=gradebook.pupils.find((i)=>i.id===pupilId);
-        if(!pupil){
+        let pupil = gradebook.pupils.find((i) => i.id === pupilId);
+        if (!pupil) {
             throw new Error("Pupil not found");
         }
-        let pupilName=pupil.name.first+' '+pupil.name.last;
-        let filteredrecord:{teacher:string,subject:string,lesson:number,mark:number}[] = [];
-        for(let record of gradebook.records){
-            if(record.name === pupilName){
-                filteredrecord.push(record.records[0]); 
+        let pupilName = pupil.name.first + ' ' + pupil.name.last;
+        let filteredrecord:Array<{teacher:string,subject:string,lesson:number,mark:number}>= [];
+        for (let record of gradebook.records) {
+            if (record.name === pupilName) {
+                
+                filteredrecord=record.records;
             }
-        }    
-        return {name:pupilName,records:filteredrecord};
+        }
+        return { name: pupilName, records: filteredrecord };
     }
-    readAll(gradebookId:string):{
+    readAll(gradebookId: string): {
         id: string;
         room: number;
         pupils: (Person & {
             id: string;
         })[];
         records: RecordType[];
-    }{
-        for(let [id,gradebook] of this.gradebooks){
-            if(id===gradebookId){
+    } {
+        for (let [id, gradebook] of this.gradebooks) {
+            if (id === gradebookId) {
                 return gradebook;
             }
         }
         throw new Error("Gradebook not found");
     }
 
-    
+
 }
 
 const groups = new Groups();
@@ -251,6 +266,13 @@ const record = {
     mark: 9
 };
 const record2 = {
+    pupilId: pupil2.id,
+    teacherId: teacherId,
+    subjectId: subjectId,
+    lesson: 7,
+    mark: 8
+};
+const record3 = {
     pupilId: pupil.id,
     teacherId: teacherId,
     subjectId: subjectId,
@@ -260,8 +282,11 @@ const record2 = {
 
 gradebooks.addRecord(gradebookId, record);
 gradebooks.addRecord(gradebookId, record2);
+gradebooks.addRecord(gradebookId, record3);
 
 console.log(gradebooks.read(gradebookId, pupil.id));
-// console.log(gradebooks.readAll(gradebookId));
+console.log(gradebooks.read(gradebookId, pupil2.id));
+console.log(gradebooks.readAll(gradebookId));
 
 // gradebooks.clear(2);
+// console.log(gradebooks.readAll(gradebookId));
