@@ -1,12 +1,14 @@
+// adding type alias to make sure i know it:dd
+type type1=string;
 export interface Person{
     name: {
-        first: string;
-        last: string;
+        first: type1;
+        last: type1;
     };
-    dateOfBirth: string; // format date
-    phones: Array<{phone:string;primary:boolean}>; // array of strings
-    sex:string;
-    description?:string;
+    dateOfBirth: type1; // format date
+    phones: Array<{phone:type1;primary:boolean}>; // array of strings
+    sex:type1;
+    description?:type1;
 }
 
 export abstract class Persons{
