@@ -21,6 +21,12 @@ export default class Subjects {
 
     add(subject:Subject):string {
         this.isValidSubject(subject);
+        for(let i of this.subjectList.values()){
+            if(i.title===subject.title && i.lessons===subject.lessons && i.description===subject.description){
+                throw new Error('Subject already exists');
+            }
+        }
+
         let id = Math.random().toString(36).slice(2);
         this.subjectList.set(id, subject);
         
@@ -51,18 +57,3 @@ export default class Subjects {
         return arr;
     }
 }
-// let subjects = new Subjects();
-// const history = {
-//     title: 'History',
-//     lessons: 24
-// };
-// const math = {
-//     title: 'Math',
-//     lessons: 30,
-//     description:'Hello Math'
-// };
-// let subjId1=subjects.add(history);
-// let subjId2=subjects.add(math);
-// // subjects.remove(subjId2);
-// console.log(subjects.verify(history));
-// console.log(subjects.readAll());
