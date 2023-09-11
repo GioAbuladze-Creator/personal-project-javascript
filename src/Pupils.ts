@@ -36,24 +36,3 @@ export default class Pupils extends Persons{
         }
     }
 }
-// let pupils = new Pupils();
-// let pupil1= pupils.add({
-//     name: {
-//         first: 'John',
-//         last: 'Doe',
-        
-//     },
-//     dateOfBirth: '01-01-1999',
-//     phones: [
-//         {phone:'+995 (551) 12-13-73',primary:true},
-//         {phone:'+995 (599) 22-11-99',primary:false},
-//     ],
-//     sex:'male',
-    
-    
-// })
-
-// console.log(pupils.read(pupil1.id));
-// pupils.update(pupil1.id,{phones:[{phone:'+995 (777) 77-77-77',primary:true}]});
-// // pupils.remove(pupil1.id);
-// console.log(pupils.read(pupil1.id));
