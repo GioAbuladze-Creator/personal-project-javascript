@@ -93,39 +93,3 @@ export default class Teachers extends Persons{
     }
 
 }   
-
-// let teachers=new Teachers();
-let teacher1 = {
-    name: {
-        first: "Gio",
-        last: "Carvanjo",
-    },
-    dateOfBirth: "14-8-2023",
-    emails: [
-        {
-            email: "maths@gmail.com",
-            primary: true,
-        }
-    ],
-    phones: [
-        {
-            phone: "+995 (557) 07-88-87", // +995 (XXX) XX-XX-XX
-            primary: true,
-        }
-    ],
-    sex: "Male",
-    subjects: [
-        {
-            subject: "XIMIA",
-        },
-        {
-            subject: "History",
-        }
-    ],
-    description: "Have Fun!",
-}
-// let teacherId=teachers.add(teacher1);
-// console.log(teachers.read(teacherId))
-// // teachers.remove(teacherId);
-// teachers.update(teacherId,{phones:[{phone:'+995 (777) 77-77-77',primary:true}],name:{first:'Michael',last:'Jackson'}});
-// console.log(teachers.read(teacherId))
