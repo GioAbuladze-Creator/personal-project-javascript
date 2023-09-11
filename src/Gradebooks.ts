@@ -15,7 +15,6 @@ type RecordType = {
     records: Array<{ teacher: string, subject: string, lesson: number, mark: number }>
 }
 class Gradebooks {
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! records
     private gradebooks: Map<string, { id: string, room: number, pupils: Array<Person & { id: string }>, records: Array<RecordType> }>;
     private groups: Groups;
     private teachers: Teachers;
@@ -41,6 +40,12 @@ class Gradebooks {
         }
         if (record.mark < 0) {
             throw new Error("Mark must be a positive number");
+        }
+        let required = ['pupilId', 'teacherId', 'subjectId', 'lesson', 'mark'];
+        for (let key in record) {
+            if (!required.includes(key)) {
+                throw new Error("Invalid Record");
+            }
         }
     }
     constructor(groups: Groups, teachers: Teachers, subjects: Subjects) {
@@ -96,19 +101,21 @@ class Gradebooks {
             throw new Error("Invalid Record");
         }
         if (gradebook.records.length > 0) {
-            let pupilFound=false;
+            let pupilFound = false;
             for (let rec of gradebook.records) {
-                if (rec.name === pupilName && rec.records[0].lesson === lesson && rec.records[0].subject === subject.title && rec.records[0].teacher === teacherName) {
-                    throw new Error("Record already exists");
-                }
                 if (rec.name === pupilName) {
+                    for (let record of rec.records) {
+                        if (record.lesson === lesson && record.subject === subject.title && record.teacher === teacherName) {
+                            throw new Error("Record already exists");
+                        }
+                    }
                     let recordObj = { teacher: teacher.name.first + ' ' + teacher.name.last, subject: subject.title, lesson, mark };
                     rec.records.push(recordObj);
-                    pupilFound=true;
+                    pupilFound = true;
                     break;
                 }
             }
-            if(!pupilFound){
+            if (!pupilFound) {
                 let recordObj = { name: pupilName, records: [{ teacher: teacher.name.first + ' ' + teacher.name.last, subject: subject.title, lesson, mark }] }
                 gradebook.records.push(recordObj);
             }
@@ -128,11 +135,11 @@ class Gradebooks {
             throw new Error("Pupil not found");
         }
         let pupilName = pupil.name.first + ' ' + pupil.name.last;
-        let filteredrecord:Array<{teacher:string,subject:string,lesson:number,mark:number}>= [];
+        let filteredrecord: Array<{ teacher: string, subject: string, lesson: number, mark: number }> = [];
         for (let record of gradebook.records) {
             if (record.name === pupilName) {
-                
-                filteredrecord=record.records;
+
+                filteredrecord = record.records;
             }
         }
         return { name: pupilName, records: filteredrecord };
@@ -156,137 +163,137 @@ class Gradebooks {
 
 }
 
-const groups = new Groups();
-const teachers = new Teachers();
-const subjects = new Subjects();
+// const groups = new Groups();
+// const teachers = new Teachers();
+// const subjects = new Subjects();
 
 
-let groupId = groups.add(100);
-let groupId2 = groups.add(777);
+// let groupId = groups.add(100);
+// let groupId2 = groups.add(777);
 
 
-const pupils = new Pupils();
-const data = {
-    name: {
-        first: "Michael",
-        last: "Jordan"
-    },
-    dateOfBirth: "05-02-1970", // dd-mm-yyyy
-    phones: [
-        {
-            phone: "+995 (551) 12-13-73", // +995 (XXX) XX-XX-XX
-            primary: true,
-        }
-    ],
-    sex: "male", // male OR female
-    description: "Basketball player"
-}
-const data2 = {
-    name: {
-        first: "Cristiano",
-        last: "Ronaldo"
-    },
-    dateOfBirth: "11-04-1988", // dd-mm-yyyy
-    phones: [
-        {
-            phone: "+995 (566) 23-13-77", // +995 (XXX) XX-XX-XX
-            primary: true,
-        }
-    ],
-    sex: "male", // male OR female
-    description: "Football player"
-}
-// Create a new pupil
-const pupil = pupils.add(data);
-const pupil2 = pupils.add(data2);
-groups.addPupil(groupId, pupil);
-groups.addPupil(groupId, pupil2);
-// groups.removePupil(groupId, pupil.id)
-groups.update(groupId, { room: 299 })
+// const pupils = new Pupils();
+// const data = {
+//     name: {
+//         first: "Michael",
+//         last: "Jordan"
+//     },
+//     dateOfBirth: "05-02-1970", // dd-mm-yyyy
+//     phones: [
+//         {
+//             phone: "+995 (551) 12-13-73", // +995 (XXX) XX-XX-XX
+//             primary: true,
+//         }
+//     ],
+//     sex: "male", // male OR female
+//     description: "Basketball player"
+// }
+// const data2 = {
+//     name: {
+//         first: "Cristiano",
+//         last: "Ronaldo"
+//     },
+//     dateOfBirth: "11-04-1988", // dd-mm-yyyy
+//     phones: [
+//         {
+//             phone: "+995 (566) 23-13-77", // +995 (XXX) XX-XX-XX
+//             primary: true,
+//         }
+//     ],
+//     sex: "male", // male OR female
+//     description: "Football player"
+// }
+// // Create a new pupil
+// const pupil = pupils.add(data);
+// const pupil2 = pupils.add(data2);
+// groups.addPupil(groupId, pupil);
+// groups.addPupil(groupId, pupil2);
+// // groups.removePupil(groupId, pupil.id)
+// groups.update(groupId, { room: 299 })
 
-const gradebooks = new Gradebooks(groups, teachers, subjects);
-let gradebookId = gradebooks.add(groupId);
-let gradebookId2 = gradebooks.add(groupId2);
+// const gradebooks = new Gradebooks(groups, teachers, subjects);
+// let gradebookId = gradebooks.add(groupId);
+// let gradebookId2 = gradebooks.add(groupId2);
+// // console.log(gradebooks.readAll(gradebookId));
+
+
+// let teacher1 = {
+//     name: {
+//         first: "Gio",
+//         last: "Carvanjo",
+//     },
+//     dateOfBirth: "14-8-2023",
+//     emails: [
+//         {
+//             email: "maths@gmail.com",
+//             primary: true,
+//         }
+//     ],
+//     phones: [
+//         {
+//             phone: "+995 (557) 07-88-87", // +995 (XXX) XX-XX-XX
+//             primary: true,
+//         }
+//     ],
+//     sex: "MALE",
+//     subjects: [
+//         {
+//             subject: "XIMIA",
+//         },
+//         {
+//             subject: "History",
+//         }
+//     ],
+//     description: "Have Fun!",
+// }
+// const teacherId = teachers.add(teacher1);
+// const history = {
+//     title: 'History',
+//     lessons: 24
+// };
+// const math = {
+//     title: 'Math',
+//     lessons: 30,
+//     description: 'math is fun'
+// };
+// const physics = {
+//     title: 'Physics',
+//     lessons: 15,
+//     description: 'physics is dangerous',
+// };
+
+// const subjectId = subjects.add(history);
+// const subjectId2 = subjects.add(math);
+// const subjectId3 = subjects.add(physics);
+// const record = {
+//     pupilId: pupil.id,
+//     teacherId: teacherId,
+//     subjectId: subjectId,
+//     lesson: 1,
+//     mark: 9
+// };
+// const record2 = {
+//     pupilId: pupil2.id,
+//     teacherId: teacherId,
+//     subjectId: subjectId,
+//     lesson: 7,
+//     mark: 8
+// };
+// const record3 = {
+//     pupilId: pupil.id,
+//     teacherId: teacherId,
+//     subjectId: subjectId,
+//     lesson: 7,
+//     mark: 8
+// };
+
+// gradebooks.addRecord(gradebookId, record);
+// gradebooks.addRecord(gradebookId, record2);
+// gradebooks.addRecord(gradebookId, record3);
+
+// console.log(gradebooks.read(gradebookId, pupil.id));
+// console.log(gradebooks.read(gradebookId, pupil2.id));
 // console.log(gradebooks.readAll(gradebookId));
-
-
-let teacher1 = {
-    name: {
-        first: "Gio",
-        last: "Carvanjo",
-    },
-    dateOfBirth: "14-8-2023",
-    emails: [
-        {
-            email: "maths@gmail.com",
-            primary: true,
-        }
-    ],
-    phones: [
-        {
-            phone: "+995 (557) 07-88-87", // +995 (XXX) XX-XX-XX
-            primary: true,
-        }
-    ],
-    sex: "MALE",
-    subjects: [
-        {
-            subject: "XIMIA",
-        },
-        {
-            subject: "History",
-        }
-    ],
-    description: "Have Fun!",
-}
-const teacherId = teachers.add(teacher1);
-const history = {
-    title: 'History',
-    lessons: 24
-};
-const math = {
-    title: 'Math',
-    lessons: 30,
-    description: 'math is fun'
-};
-const physics = {
-    title: 'Physics',
-    lessons: 15,
-    description: 'physics is dangerous',
-};
-
-const subjectId = subjects.add(history);
-const subjectId2 = subjects.add(math);
-const subjectId3 = subjects.add(physics);
-const record = {
-    pupilId: pupil.id,
-    teacherId: teacherId,
-    subjectId: subjectId,
-    lesson: 1,
-    mark: 9
-};
-const record2 = {
-    pupilId: pupil2.id,
-    teacherId: teacherId,
-    subjectId: subjectId,
-    lesson: 7,
-    mark: 8
-};
-const record3 = {
-    pupilId: pupil.id,
-    teacherId: teacherId,
-    subjectId: subjectId,
-    lesson: 7,
-    mark: 8
-};
-
-gradebooks.addRecord(gradebookId, record);
-gradebooks.addRecord(gradebookId, record2);
-gradebooks.addRecord(gradebookId, record3);
-
-console.log(gradebooks.read(gradebookId, pupil.id));
-console.log(gradebooks.read(gradebookId, pupil2.id));
-console.log(gradebooks.readAll(gradebookId));
 
 // gradebooks.clear(2);
 // console.log(gradebooks.readAll(gradebookId));
